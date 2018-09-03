@@ -44,8 +44,9 @@ function makeNext(arr) {
         if (k == -1 || arr[j] == arr[k]) {
             k++;
             j++;    
-            if (arr[j] != arr[k]) next[j] = k;
-            else next[j] = next[k];
+            // if (arr[j] != arr[k]) next[j] = k;
+            // else next[j] = next[k];
+            next[j] = k;
         } else {
             k = next[j];
         }

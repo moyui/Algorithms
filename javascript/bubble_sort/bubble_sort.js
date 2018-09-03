@@ -12,3 +12,32 @@ function bubble(arr) {
   }
   return arr;
 }
+
+function doubleBubble(arr) {
+  var length = arr.length;
+  var left = 0;
+  var right = length;
+  while (left < right) {
+    preSort(array, left, right);
+    right--;
+    if (left >= right) break;
+    backSort(array, left, right);
+    left++;
+  }
+}
+
+function preSort(arr, left, right) {
+  for (var i = left; i < right; i++) {
+    if (arr[i] > arr[i + 1]) {
+      swap(arr, i, i + 1);
+    }
+  }
+}
+
+function backSort(arr, left, right) {
+  for (var j = right; j >= left; j--) {
+    if (arr[j - 1] > arr[j]) {
+      swap(arr, j ,j - 1);
+    }
+  }
+}
