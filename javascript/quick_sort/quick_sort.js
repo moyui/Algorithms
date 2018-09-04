@@ -27,7 +27,7 @@ function quickSort (arr, lo, hi) {
   return arr;
 }
 
-//第二种版本
+//第二种版本 Nicholas C.Zakas
 function swap(items, firstIndex, secondIndex){
   var temp = items[firstIndex];
   items[firstIndex] = items[secondIndex];
@@ -43,7 +43,7 @@ function partition(items, left, right) {
       while (items[i] < item[mid]) i++;
       while (items[j] > item[mid]) j--;
       if (i <= j) {
-          swap(item, i ,j);
+          swap(items, i ,j);
           i++;
           j--;
       }
@@ -51,11 +51,27 @@ function partition(items, left, right) {
   return i;
 }
 
+//另一种划分方法
+function partition(arr, lo, hi) {
+  var key = arr[lo];
+  var i = lo + 1;
+  var j = hi;
+  while (i < j) {
+    while (arr[j] >= key && i < j) j--;
+    while (arr[i] <= key && i < j) i++;
+    if (i < j) {
+      swap(arr, i, j);
+    }
+  }
+  swap(arr, i , j);
+  return j;
+}
+
 function quickSort(items, left, right) {
   var index;
   if (items.length > 1) {
       index = partition(items, left, right);
-      if (left < index) {
+      if (left < index - 1) {
           quickSort(items, left, index - 1);
       }
       if (index < right) {
@@ -65,19 +81,31 @@ function quickSort(items, left, right) {
   return items;
 }
 
-function partition(item, lo, hi) {
-  var mid = Math.floor((lo + hi) / 2),
-      i = lo,
-      j = hi;
-  
-  while (i <= j) {
-      while (item[i] < item[mid]) i++;
-      while (item[j] > item[mid]) j--;
-      if (i <= j) {
-          swap(item, i, j);
-          i++;
-          j--;
-      }
+//第三种版本
+function quickSort(arr, left, right) {
+  var len = arr.length,
+      pivot,
+      partitionIndex;
+
+  if (left < right) {
+    pivot = right;
+    partitionIndex = partition(arr, pivot, left, right);
+    quickSort(arr, left, partitionIndex-1);
+    quickSort(arr, partitionIndex+1, right);
   }
-  return i;
+  return arr;
+}
+
+function partition(arr, pivot, left, right) {
+  var pivotValue = arr[pivot],
+      partitionIndex = left;
+  
+  for (var i = left; i < right; i++) {
+    if (arr[i] < pivotValue) {
+      swap(arr, i , partitionIndex);
+      partitionIndex++;
+    }
+  }
+  swap(arr, right, partitionIndex);
+  return partitionIndex;
 }
