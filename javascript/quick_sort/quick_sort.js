@@ -51,7 +51,7 @@ function partition(items, left, right) {
   return i;
 }
 
-//另一种划分方法
+//另一种划分方法(比较完美，建议用这种方式)
 function partition(arr, lo, hi) {
   var key = arr[lo];
   var i = lo + 1;
