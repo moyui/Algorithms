@@ -1,27 +1,70 @@
 var maximalRectangle = function(matrix) {
-    var n = matrix.length;
+    var m = matrix.length;
+    if (m == 0) return 0;
+    var n = matrix[0].length;
     if (n == 0) return 0;
-    var m = matrix[0].length;
-    var h = new Array(n).fill(0);
-    var max = 0;
-    //纵行
-    for (let j = 0; j < m; j++) {
-        //横行
-        for (let i = 0; i < n; i++) {
-            if (matrix[i][j] === '1') h[i]++;
-            else h[i] = 0;
-        }
-        //(查看该位置前后有几个连续的1)
-        for (let i = 0; i < n; i++) {
-            let k1 = i - 1;
-            //当这一行的前一个数大于等于后一个数 1 0;
-            while (k1 >= 0 && h[i] <= h[k1]) k1--;
-            let k2 = i + 1;
-            //当这一行的后一个数大于等于前一个数时 0 1;
-            while (k2 < 0 && h[i] <= h[k2]) k2++;
-            //该位置累乘
-            max = Math.max(max, h[i] * (k2 - k1 -1));
+
+    var up = new Array(m).fill(new Array(n));
+    var left = new Array(m).fill(new Array(n));
+    var right = new Array(m).fill(new Array(n));
+
+    for (var i = 0; i < m; i++) {
+        for (var j = 0; j < n; j++) {
+            if (matrix[i][j] == '0') {
+                up[i][j] = 0;
+            } else {
+                up[i][j] = 1;
+                if (i > 0) {
+                    up[i][j] += up[i-1][j];
+                }
+            }
         }
     }
-    return max;
+
+    var i = 0; 
+    for (var j = 0; j < n; j++) {
+        if (matrix[i][j] == '0') {
+            i = left[i][j] = 0;
+        } else {
+            i++;
+            left[i][j] = i;
+            if (i >0 && matrix[i-1][j] == '1' && left[i-1][j] < left[i][j]) {
+                left[i][j] = left[i-1][j];
+            }
+        }
+    }
+    
+    var j = 0; 
+    for (var j = 0; j < n; j++) {
+        if (matrix[i][j] == '0') {
+            i = left[i][j] = 0;
+        } else {
+            i++;
+            left[i][j] = i;
+            if (i >0 && matrix[i-1][j] == '1' && left[i-1][j] < left[i][j]) {
+                left[i][j] = left[i-1][j];
+            }
+        }
+    }
+
+
+
+    for (var i = 0; i <= m; i++) {
+        dp[i][0] = 0;
+    }
+
+    for (var j = 0; j <= n; j++) {
+        dp[0][j] = 0;
+    }
+
+    for (var i = 1; i <= m; i++) {
+        for (var j = 1; j <= n; j++) {
+            if (matrix[i-1][j-1] == '1') {
+                dp[i][j] = Math.max(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+            }
+        }
+    }
+    return dp[i-1][j-1];
 };
