@@ -1,22 +1,39 @@
-class UF {
-  constructor() {
-    this.id;//分量id
-    this.count;//分量数量
-  }
-
-  UF(N) {
-    this.count = N;
-    this.id = new Array(N);
-    for (let i = 0 ; i < N; i++) {
-      this.id[i] = i;
+class DisjoinSet {
+  constructor(count) {
+    //每个节点的父节点都是自己
+    this.parent = new Array(count);
+    //记录数的深度
+    this.rank = new Array(count);
+    for (let i = 0; i < count; i++) {
+      this.parent[i] = i;
+      this.rank[1] = 1;
     }
   }
 
-  count() {
-    return this.count;
+  find(p) {
+    while (p != this.parent[p]) {
+      this.parent[p] = this.parent[this.parent[p]];
+      p = this.parent[p];
+    }
+
+    return p;
   }
 
-  connected(p, q) {
+  isConnected(p, q) {
     return this.find(p) === this.find(q);
+  }
+
+  union(p, q) {
+    let i = this.find(p);
+    let j = this.find(q);
+    if (i === j) return;
+    if (this.rank[i] < this.rank[j]) {
+      this.parent[i] = j;
+    } else if (this.rank[i] > this.rank[j]) {
+      this.parent[j] = i;
+    } else {
+      this.parent[i] = j;
+      this.rank[j] += 1;
+    }
   }
 }
